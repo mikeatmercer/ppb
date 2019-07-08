@@ -1,19 +1,16 @@
 import { h, Component, render } from "preact";
-import {HashRouter, Route,Link, withRouter} from "react-router-dom";
 import {Provider, Subscribe, Container} from "unstated";
 import $ from "jquery";
 
 import LanguageSelector from "../LanguageSelector";
 import LanguageContainer from "../../containers/LanguageContainer";
-
+import ContentContainer from "../../containers/ContentContainer";
+import TopicSelector  from "../TopicSelector";
 
 
 
 class App extends Component {
 
-    componentDidMount() {
-        
-    }
     render(props,state) {
 
         return (
@@ -24,6 +21,7 @@ class App extends Component {
             <br/>
             <div>{props.cLanguage.state.currentLanguage.translations.mainTitle}</div>
             This is the ppb app <br/>
+            <TopicSelector />
             
         </div>
         
@@ -31,6 +29,7 @@ class App extends Component {
     }
     componentDidMount() {
         this.props.cLanguage.setLanguage(); 
+        this.props.cContent.initializeContent();
     }
 }
 
@@ -38,10 +37,10 @@ class App extends Component {
 export default function() {
     return (
         <Provider>
-            <Subscribe to={[LanguageContainer]}>
-                {function(language) {
+            <Subscribe to={[LanguageContainer,ContentContainer]}>
+                {function(language, content) {
                     return (
-                        <App cLanguage={language}/>
+                        <App cLanguage={language} cContent={content}/>
                     )
                 }
 
