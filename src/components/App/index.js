@@ -10,6 +10,10 @@ import TopicSelector  from "../TopicSelector";
 
 
 class App extends Component {
+    componentDidMount() {
+        this.props.cLanguage.setLanguage(); 
+        this.props.cContent.initializeContent();
+    }
 
     render(props,state) {
 
@@ -17,6 +21,7 @@ class App extends Component {
             
             <div id="ppb_mainAppPage">
             <LanguageSelector />
+            
             
             <br/>
             <div>{props.cLanguage.state.currentLanguage.translations.mainTitle}</div>
@@ -27,10 +32,7 @@ class App extends Component {
         
         ) 
     }
-    componentDidMount() {
-        this.props.cLanguage.setLanguage(); 
-        this.props.cContent.initializeContent();
-    }
+
 }
 
 
