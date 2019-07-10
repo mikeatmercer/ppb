@@ -4,16 +4,20 @@ import ajaxQuery from "../util/ajaxGet.js";
 
 
 export default class LanguageContainer extends Container {
-    state = {
-        languageOptions: [
-            
-        ],
-        currentLanguage: {
-            value: null, 
-            translations: {
-               
+    constructor() {
+        super();
+        this.state = {
+            languageOptions: [
+                
+            ],
+            currentLanguage: {
+                value: null, 
+                translations: {
+                   
+                }
             }
         }
+        this.updateLanguage = this.updateLanguage.bind(this);
     }
     updateLanguage(value, optionLoad) {
         let options = optionLoad || this.state.languageOptions; 
@@ -50,11 +54,16 @@ export default class LanguageContainer extends Container {
                 let countries = e.Countries.results.map(e => {
                     return e.Title.trim()
                 });
+                let translations = JSON.parse(JSON.stringify(e));
+                delete translations.ID;
+                delete translations.Title;
+                delete translations.Countries;
+                delete translations.Label;
                 return {
                     value: e.Title,
                     title: e.Label,
                     id: e.ID,
-                    translations: JSON.parse(e.TranslationJSON),
+                    translations: translations,
                     countries: countries
                 }
             })

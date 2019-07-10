@@ -1,0 +1,28 @@
+.ppb_mainAppPage {
+    width: 770px;
+    display: flex;
+    position:relative; 
+    font-size: 12px;
+    color:black; 
+   
+}
+.leftCol {
+    width: 500px;
+    margin-right: 10px; 
+}
+.rightCol {
+    width: calc(100% - (500px + 10px));
+   
+}
+.column_header {
+    color: white; 
+    font-size: 14px;
+    padding: 10px 20px; 
+    font-weight: bold;
+    text-transform: uppercase; 
+}
+.column_body {
+    background:white; 
+    border: 2px solid #d9d9d9;
+    border-width: 0 2px 2px 2px; 
+}

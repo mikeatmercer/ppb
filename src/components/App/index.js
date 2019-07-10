@@ -1,12 +1,21 @@
 import { h, Component, render } from "preact";
 import {Provider, Subscribe, Container} from "unstated";
-import $ from "jquery";
 
 import LanguageSelector from "../LanguageSelector";
 import LanguageContainer from "../../containers/LanguageContainer";
 import ContentContainer from "../../containers/ContentContainer";
 import TopicSelector  from "../TopicSelector";
+import style from "./style.scss";
 
+
+function Column(pr) {
+    return <div className={style.column}>
+        <h2 style={{backgroundColor: pr.headerColor}} className={style.column_header}>{pr.headerTitle}</h2>
+        <div className={style.column_body}>
+            {pr.children}
+        </div>
+    </div>
+}
 
 
 class App extends Component {
@@ -16,17 +25,31 @@ class App extends Component {
     }
 
     render(props,state) {
+        let test = [];
+
+        
 
         return (
             
-            <div id="ppb_mainAppPage">
-            <LanguageSelector />
+            <div className={style.ppb_mainAppPage} id="ppb_mainAppPage">
+                
+                <LanguageSelector />
+                <div className={style.leftCol}>
+                <Column headerTitle={props.cLanguage.state.currentLanguage.translations.MainTitle} headerColor={"#43286d"}>
+                <div>{props.cLanguage.state.currentLanguage.translations.mainTitle}</div>
+            This is the ppb app <br/>
+            <TopicSelector />
+                </Column>
+                </div>
+                <div className={style.rightCol}>
+                    <Column headerTitle={props.cLanguage.state.currentLanguage.translations.SidebarTitle} headerColor={"#004c50"}>
+                 
+                    </Column>
+                </div>
             
             
             <br/>
-            <div>{props.cLanguage.state.currentLanguage.translations.mainTitle}</div>
-            This is the ppb app <br/>
-            <TopicSelector />
+            
             
         </div>
         
