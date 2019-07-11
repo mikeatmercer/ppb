@@ -1,6 +1,7 @@
 import {Container} from "unstated";
 import $ from "jquery";
 import ajaxQuery from "../util/ajaxGet.js";
+import HTMLstrip from "../util/HTMLstrip.js";
 
 //SEND Filtername and page number down to list, compile it there. Create a page update function
 export default class ContentContainer extends Container { 
@@ -27,9 +28,10 @@ export default class ContentContainer extends Container {
     }
     
     updateTopic(topic) {
+     
         this.setState({selectedTopic: topic, page: 0});
         if(!topic) {
-            this.setState({documents: documentsUnfiltered});
+            this.setState({documents: this.state.documentsUnfiltered});
             return ; 
         }
         let filtered = this.state.documentsUnfiltered.filter(function(e){
@@ -47,11 +49,29 @@ export default class ContentContainer extends Container {
         this.setState({topicsLoading: true, loading: true, docsLoading: true, selectedTopic: null, selectedCountry: country, page: 0});
         localStorage.setItem('country',country);
         this.updateSupportHTML(country);
-        let query = `lists/GetByTitle('HRPolicies')/items?$select=PolicyName,File,Country/Title,ContentType/Name,ContentTypeId,URL,Topic/Title,Role/Title&$top=999&$expand=Role,Topic,ContentType,ContentType/Name,File,Country,Country/Title&$filter=substringof('${country}',Country/Title)`;
+        let query = `lists/GetByTitle('HRPolicies')/items?$select=IsHighlighted,PolicyName,File,Country/Title,ContentType/Name,ContentTypeId,URL,Topic/Title,Role/Title&$top=999&$expand=Role,Topic,ContentType,ContentType/Name,File,Country,Country/Title&$filter=substringof('${country}',Country/Title)`;
 
         let updateCallback = function(data) {
             let topicOptions = [];
-                this.setState({documentsUnfiltered:data.d.results, documents:data.d.results, loading: false});
+            let doclist = data.d.results.map(function(e){
+                if(e.ContentType.Name == "Link to a Document" && !e.URL) {
+                    return {
+                        bad: true
+                    }
+                }
+                return {
+                    title: HTMLstrip(e.PolicyName),
+                    topics: e.Topic.results.map(e => e.Title),
+                    url: (e.ContentType.Name == "Link to a Document") ? e.URL.Url : e.File.ServerRelativeUrl,
+                    type: (e.ContentType.Name == "Link to a Document") ? "link" : "download",
+                    highlighted: e.IsHighlighted 
+                }
+            });
+            doclist = doclist.filter(function(e){
+                return !e.bad;
+            });
+      
+                this.setState({documentsUnfiltered:doclist, documents:doclist, loading: false});
                 
                 data.d.results.forEach((e) => {
                     

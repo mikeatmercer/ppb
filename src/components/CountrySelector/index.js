@@ -3,6 +3,7 @@ import ContentContainer from "../../containers/ContentContainer";
 import LanguageContainer from "../../containers/LanguageContainer";
 import SelectorSm from "../SelectorSm";
 import style from "./style.scss";
+import TopBar from "../TopBar"
 
 export default function() {
     return <Subscribe to={[ContentContainer, LanguageContainer]}>
@@ -12,7 +13,7 @@ export default function() {
             return <div className={style.container}>&nbsp;</div>
         }
      
-        let labelText = lang.state.currentLanguage.translations.SelectCountryLabel || "Showing Results for:";
+        let labelText = lang.state.currentLanguage.translations.CountrySelectLabel || "Showing Results for:";
         let options = content.state.countryOptions.map(function(e){
             return {
                 value: e,
@@ -20,8 +21,8 @@ export default function() {
             }
         })
         return(
-            <div className={style.container}>
-                <span className={style.label}>{labelText.trim()} </span> 
+            <TopBar addStyles={style.container}>
+<span className={style.label}>{labelText.trim()} </span> 
                 <SelectorSm
                     disabledState={content.state.loading}
                     options={options} 
@@ -29,7 +30,8 @@ export default function() {
                     selected_value={content.state.selectedCountry}
                     selected_label={content.state.selectedCountry}
                 />
-            </div>
+            </TopBar>
+
         )
     
     }}

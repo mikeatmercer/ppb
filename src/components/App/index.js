@@ -7,6 +7,9 @@ import ContentContainer from "../../containers/ContentContainer";
 import TopicSelector  from "../TopicSelector";
 import style from "./style.scss";
 import CountrySelector from "../CountrySelector";
+import DocumentList from "../DocumentList";
+import TopBar from "../TopBar";
+import SideBarContent from "../SideBarContent";
 
 
 function Column(pr) {
@@ -40,12 +43,17 @@ class App extends Component {
                 <Column headerTitle={props.cLanguage.state.currentLanguage.translations.MainTitle} headerColor={"#43286d"}>
                     <TopicSelector />
                     <CountrySelector />
-            This is the ppb app <br/>
+                    <DocumentList />
+
             
                 </Column>
                 </div>
                 <div className={style.rightCol}>
                     <Column headerTitle={props.cLanguage.state.currentLanguage.translations.SidebarTitle} headerColor={"#004c50"}>
+                        <TopBar>
+                            Based on your country. Change at left. 
+                        </TopBar>
+                        <SideBarContent/>
                  
                     </Column>
                 </div>

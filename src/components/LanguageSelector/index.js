@@ -3,6 +3,7 @@ import {Subscribe} from "unstated";
 import SelectorSm from "../SelectorSm";
 import LanguageContainer from "../../containers/LanguageContainer.js";
 
+
 export default function() {
     return (
         <Subscribe to={[LanguageContainer]} >
@@ -24,8 +25,8 @@ export default function() {
                             selected_label={label} 
                             options={optionsNew}
                             changeMethod={lang.updateLanguage}/>
-                        
-                    </div>
+            
+            </div>
                 ) 
             }
 
