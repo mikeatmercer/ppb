@@ -2,6 +2,9 @@
 
 .selector_container {
     position:relative;
+    &.disabled {
+        opacity: .65; 
+    }
 }
 .mask{
     border-bottom: 1px solid $link-blue; 
@@ -11,6 +14,8 @@
     position: absolute;
     width: 100%; 
     box-sizing: border-box;
+    top: 2px; 
+
     &:after {
         display:block;
         content:'';

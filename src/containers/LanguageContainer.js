@@ -59,6 +59,10 @@ export default class LanguageContainer extends Container {
                 delete translations.Title;
                 delete translations.Countries;
                 delete translations.Label;
+                delete translations.Author;
+                delete translations.Editor;
+                delete translations.Created;
+                delete translations.Modified; 
                 return {
                     value: e.Title,
                     title: e.Label,
@@ -73,7 +77,7 @@ export default class LanguageContainer extends Container {
 
             //IF LANGUAGE IS ALREADY SET, UPDATE CURRENT LANGUAGE WITH NEW LANGUAGE
             if(langSet) {
-                this.updateLanguage(localStorage.getItem('language'));
+                this.updateLanguage(localStorage.getItem('language'),options);
                 return ;
             }
                     

@@ -6,11 +6,13 @@ import LanguageContainer from "../../containers/LanguageContainer";
 import ContentContainer from "../../containers/ContentContainer";
 import TopicSelector  from "../TopicSelector";
 import style from "./style.scss";
+import CountrySelector from "../CountrySelector";
 
 
 function Column(pr) {
+    let headerText = pr.headerTitle || <span>&nbsp;</span>;
     return <div className={style.column}>
-        <h2 style={{backgroundColor: pr.headerColor}} className={style.column_header}>{pr.headerTitle}</h2>
+        <h2 style={{backgroundColor: pr.headerColor}} className={style.column_header}>{headerText}</h2>
         <div className={style.column_body}>
             {pr.children}
         </div>
@@ -36,9 +38,10 @@ class App extends Component {
                 <LanguageSelector />
                 <div className={style.leftCol}>
                 <Column headerTitle={props.cLanguage.state.currentLanguage.translations.MainTitle} headerColor={"#43286d"}>
-                <div>{props.cLanguage.state.currentLanguage.translations.mainTitle}</div>
+                    <TopicSelector />
+                    <CountrySelector />
             This is the ppb app <br/>
-            <TopicSelector />
+            
                 </Column>
                 </div>
                 <div className={style.rightCol}>

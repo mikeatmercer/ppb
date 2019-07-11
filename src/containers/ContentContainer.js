@@ -4,21 +4,28 @@ import ajaxQuery from "../util/ajaxGet.js";
 
 //SEND Filtername and page number down to list, compile it there. Create a page update function
 export default class ContentContainer extends Container { 
-    state = {
-        selectedCountry: null,
-        documents: [],
-        documentsUnfiltered: [],
-        supportHTML: [],
-        supportHTMLstatus: "loading",
-        countryOptions: [],
-        docsLoading: true,
-        topicsLoading: true, 
-        selectedTopic: "", 
-        topicOptions: [],
-        loading: true,
-        page: 0,
-        increment: 20
+    constructor() {
+        super();
+        this.state = {
+            selectedCountry: null,
+            documents: [],
+            documentsUnfiltered: [],
+            supportHTML: [],
+            supportHTMLstatus: "loading",
+            countryOptions: [],
+            docsLoading: true,
+            topicsLoading: true, 
+            selectedTopic: "", 
+            topicOptions: [],
+            loading: true,
+            page: 0,
+            increment: 20
+        }
+        this.updateTopic = this.updateTopic.bind(this);
+        this.updatePage = this.updatePage.bind(this);
+        this.updateCountry = this.updateCountry.bind(this);
     }
+    
     updateTopic(topic) {
         this.setState({selectedTopic: topic, page: 0});
         if(!topic) {
@@ -37,7 +44,7 @@ export default class ContentContainer extends Container {
         console.log(newCount);
     }
     updateCountry(country) {
-        this.setState({topicsLoading: true, docsLoading: true, selectedTopic: null, selectedCountry: country, page: 0});
+        this.setState({topicsLoading: true, loading: true, docsLoading: true, selectedTopic: null, selectedCountry: country, page: 0});
         localStorage.setItem('country',country);
         this.updateSupportHTML(country);
         let query = `lists/GetByTitle('HRPolicies')/items?$select=PolicyName,File,Country/Title,ContentType/Name,ContentTypeId,URL,Topic/Title,Role/Title&$top=999&$expand=Role,Topic,ContentType,ContentType/Name,File,Country,Country/Title&$filter=substringof('${country}',Country/Title)`;
@@ -54,7 +61,7 @@ export default class ContentContainer extends Container {
                 });
       
                 topicOptions = topicOptions.filter((item,index,self) => self.indexOf(item) === index);
-                this.setState({topicOptions: topicOptions});
+                this.setState({topicOptions: topicOptions, });
         }.bind(this);
         ajaxQuery(query,updateCallback);
       

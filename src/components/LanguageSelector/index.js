@@ -15,9 +15,10 @@ export default function() {
                     return e.value === lang.state.currentLanguage.value;
                 });
                 let label = (!currentCountry.length)? "" : currentCountry[0].title;
+                let langLabel = lang.state.currentLanguage.translations.LanguageLabel || "Language:";
                 return(
                     <div className={style.language_selector}>
-                        <label className={style.language_label}>Language: </label>
+                        <label className={style.language_label}>{langLabel.trim()} </label>
                         <SelectorSm 
                             selected_value={lang.state.currentLanguage.value} 
                             selected_label={label} 
