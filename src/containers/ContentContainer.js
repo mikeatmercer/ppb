@@ -2,6 +2,7 @@ import {Container} from "unstated";
 import $ from "jquery";
 import ajaxQuery from "../util/ajaxGet.js";
 import HTMLstrip from "../util/HTMLstrip.js";
+import HTMLClean from "../util/HTMLclean";
 
 //SEND Filtername and page number down to list, compile it there. Create a page update function
 export default class ContentContainer extends Container { 
@@ -91,6 +92,11 @@ export default class ContentContainer extends Container {
         this.setState({supportHTMLstatus: "loading"});
         const htmlCallback = function(data) {
          //Make contact card thing work
+         
+         var newHTML = data.d.results.map(e => HTMLClean(e.ContactTitle));
+        
+         this.setState({supportHTMLstatus: "loaded", supportHTML: newHTML});
+         
         }.bind(this);
     
         let query = `lists/GetByTitle('HRContacts')/items?$select=ContactTitle,Country/Title&$top=999&$expand=Country,Country/Title&$filter=substringof('${country}',Country/Title)`;
