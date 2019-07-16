@@ -71,6 +71,16 @@ export default class LanguageContainer extends Container {
                     countries: countries
                 }
             })
+            options = options.map(function(e){
+                let en = options.filter(e => e.value == "en")[0];
+                let keys = Object.keys(e.translations);
+                keys.forEach(function(k){
+                    if(!e.translations[k]) {
+                        e.translations[k] = en.translations[k];
+                    }
+                })
+                return e; 
+            });
        
             
             this.setState({languageOptions: options});  

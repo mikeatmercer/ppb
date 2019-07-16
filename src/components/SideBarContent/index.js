@@ -4,10 +4,11 @@ import ContentContainer from "../../containers/ContentContainer";
 import LanguageContainer from  "../../containers/LanguageContainer";
 
 function LinkList(p) {
+    let loadingClass = (p.loading) ? styles.loading : "";
     let list = p.list.map(e => <li><a href={e.url} target="_blank">{e.title}</a></li>)
     return <div className={styles.section}>
         <Header title={p.title} />
-        <ul className={styles.linklist}>
+        <ul className={`${styles.linklist} ${loadingClass}`}>
             {list}
         </ul>
         </div>
@@ -21,8 +22,9 @@ function ContactHTML(p) {
             if(c.state.supportHTMLstatus === "loaded" && !c.state.supportHTML.length) {
                 return; 
             }
+            let loadingClass = (c.state.supportHTMLstatus === "loading") ? styles.loading : "";
             let content = p.html.map(function(e){
-                return <div dangerouslySetInnerHTML={{ __html: e }}/>
+                return <div className={loadingClass} dangerouslySetInnerHTML={{ __html: e }}/>
             });
             return <div className={styles.section}>
                 <Header title={l.state.currentLanguage.translations.NeedHelp} />
@@ -39,7 +41,7 @@ export default function() {
         {function(c){
         
             let quickLinks = c.state.documentsUnfiltered.filter((e) => ( e.highlighted));
-            let linkDisplay = (quickLinks.length > 0) ? <LinkList list={quickLinks} title={"Quick Links"} /> : null
+            let linkDisplay = (quickLinks.length > 0) ? <LinkList loading={c.state.loading} list={quickLinks} title={"Quick Links"} /> : null
             
             return <div className={styles.sidebar}>
                 {linkDisplay}

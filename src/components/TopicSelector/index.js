@@ -8,7 +8,13 @@ import {Component} from "preact";
 export default class TopicSelector extends Component {
     constructor() {
         super();
-    
+        this.state = {
+            focused: false
+        }
+        this.focusSwitch = this.focusSwitch.bind(this);
+    }
+    focusSwitch(state) {
+        this.setState({focused: state});
     }
  
     render() {
@@ -20,20 +26,23 @@ export default class TopicSelector extends Component {
     placeholder = (content.state.selectedTopic === "all") ? "All Topics" : placeholder; 
     let loadingStyle = (content.state.loading === true)? style.disabled : "";
     let topicOptions = content.state.topicOptions.map(e => <option value={e}>{e}</option>)
+    let focusClass = (this.state.focused)? style.focused : ""
     return(    
     <div className={style.box}>
         <div className={`${style.container} ${loadingStyle}`}>
+        {focusClass}
             <div className={style.instructions}>{instructions}</div>
             <div className={style.placeholder}>{placeholder}</div>
            
-            <select ref={select => this.select = select}
-                className={style.select}
+            <select onFocus={()=>(this.focusSwitch(true))} onBlur={this.focusSwitch(false)} ref={select => this.select = select}
+                className={`${style.select} ${focusClass}`}
                 onChange={(e) => (content.updateTopic(e.target.value))} 
                 value={content.state.selectedTopic}
                 disabled={content.state.loading}>
                     <option value="all">All topics</option>
-                {topicOptions}
+                    {topicOptions}
             </select>
+            
         </div>
     </div>
     )

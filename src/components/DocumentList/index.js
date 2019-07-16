@@ -45,7 +45,7 @@ export default function() {
     return <Subscribe to={[ContentContainer]}>
         {function({state}) {
             let loading = [];
-            for(let i = 0; i < 10; i++) {
+            for(let i = 0; i < state.documents.length; i++) {
                 loading.push(<li ><div className={style.container}>&nbsp;</div></li>)
             }
             if(state.loading) {
