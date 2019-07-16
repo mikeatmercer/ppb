@@ -21,8 +21,12 @@ function ContactHTML(p) {
             if(c.state.supportHTMLstatus === "loaded" && !c.state.supportHTML.length) {
                 return; 
             }
+            let content = p.html.map(function(e){
+                return <div dangerouslySetInnerHTML={{ __html: e }}/>
+            });
             return <div className={styles.section}>
                 <Header title={l.state.currentLanguage.translations.NeedHelp} />
+                {content}
                 </div>
         }}
     </Subscribe>
@@ -46,16 +50,3 @@ export default function() {
     </Subscribe>
 
 }
-
-/*
-  if(p.status === "loaded" && !p.html.length) {
-        return; 
-    }
-    let content = p.html.map(function(e){
-        return <div dangerouslySetInnerHTML={{ __html: e }}/>
-    });
-    
-    return <div className={styles.section}>
-    <Header title={p.headerText} />
-        {content}</div>
-        */

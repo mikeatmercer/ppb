@@ -29,16 +29,19 @@ export default class ContentContainer extends Container {
     }
     
     updateTopic(topic) {
-     
+        console.log(topic);
         this.setState({selectedTopic: topic, page: 0});
-        if(!topic) {
+        if(!topic || topic === "all") {
             this.setState({documents: this.state.documentsUnfiltered});
             return ; 
         }
+   
         let filtered = this.state.documentsUnfiltered.filter(function(e){
-            let topicList = e.Topic.results.map(e => e.Title);
+            let inArray = e.topics.filter(e => e === topic);
+            return inArray.length > 0; 
+           /* let topicList = e.topics.map(e => e.Title);
             let inArray = topicList.filter(e => e === topic);
-            return inArray.length > 0;
+            return inArray.length > 0;*/
         });
         this.setState({documents: filtered});
     }
@@ -91,7 +94,8 @@ export default class ContentContainer extends Container {
     updateSupportHTML(country) {
         this.setState({supportHTMLstatus: "loading"});
         const htmlCallback = function(data) {
-         //Make contact card thing work
+         //Make contact card thing work  
+         console.log(data.d.results);
          
          var newHTML = data.d.results.map(e => HTMLClean(e.ContactTitle));
         
@@ -99,7 +103,7 @@ export default class ContentContainer extends Container {
          
         }.bind(this);
     
-        let query = `lists/GetByTitle('HRContacts')/items?$select=ContactTitle,Country/Title&$top=999&$expand=Country,Country/Title&$filter=substringof('${country}',Country/Title)`;
+        let query = `lists/GetByTitle('HRContacts')/items?$select=ShowUser,ContactTitle,Country/Title&$top=999&$expand=Country,Country/Title&$filter=substringof('${country}',Country/Title) and ShowUser eq 1`;
         ajaxQuery(query, htmlCallback);
 
     }
