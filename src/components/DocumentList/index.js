@@ -4,18 +4,10 @@ import HTMLstrip from "../../util/HTMLstrip";
 import style from "./style.scss";
 
 function DocItem({doc}) {
-    /*let url = doc.File.ServerRelativeUrl;
-    let svg = SVG('download');
-    if(doc.ContentType.Name == "Link to a Document" && !doc.URL) {
-        return null;
-    }
-    if(doc.ContentType.Name == "Link to a Document") {
-        url = doc.URL.Url;
-        svg = SVG('link');
-    }*/
 
     return <li>
-        <a href={doc.url} target="_blank" className={style.container}>{SVG(doc.type)}{HTMLstrip(doc.title)}</a>
+        <a href={doc.url} target="_blank" className={style.container}>{SVG(doc.type)}{HTMLstrip(doc.title)}
+        </a>
     
     </li>
 }

@@ -29,7 +29,6 @@ export default class ContentContainer extends Container {
     }
     
     updateTopic(topic) {
-        console.log(topic);
         this.setState({selectedTopic: topic, page: 0});
         if(!topic || topic === "all") {
             this.setState({documents: this.state.documentsUnfiltered});
