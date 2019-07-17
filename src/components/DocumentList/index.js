@@ -2,21 +2,42 @@ import { Subscribe } from "unstated";
 import ContentContainer from "../../containers/ContentContainer";
 import HTMLstrip from "../../util/HTMLstrip";
 import style from "./style.scss";
+import {Component} from "preact";
+class DocItem extends Component {
+    constructor() {
+        super();
+        this.state = {
+            activeClass: ""
+        }
+    }
+    componentDidMount() {
+       /* setTimeout(function(){
+            this.setState({activeClass: style.active})
+        }.bind(this), 1);*/
+    }
 
-function DocItem({doc}) {
+    render({doc}) {
+        return <Subscribe to={[ContentContainer]}>
+            {({state}) => {
+let managerTag = (doc.roles.length === 1 && doc.roles[0] === "Manager") ? <span className={style.managerTag}>For Managers</span> : null
+let active = (state.fade) ? style.active : "";
 
-    return <li>
-        <a href={doc.url} target="_blank" className={style.container}>{SVG(doc.type)}{HTMLstrip(doc.title)}
-        </a>
-    
-    </li>
+return <li className={`${style.docItem} ${active}`}>
+    <a href={doc.url} target="_blank" className={style.container}>{SVG(doc.type)}<span className={style.text}>{HTMLstrip(doc.title)}</span> {managerTag} {doc.id}
+    </a>
+
+</li>
+            }}
+        </Subscribe>
+        
+    }
 }
 
 function CCCallout() {
     return <li>
         <div className={style.container}>
             <img src="http://mercerlink.mercer.com/Style%20Library/Mercer/img/flags-36.png" className={style.usicon} />
-            <div className={style.text}>
+            <div>
                 US &amp; Canadian Colleagues: Visit <a href="https://colleagueconnect.mmc.com/en-us/CareerAndRewards/Pages/CareerAndRewardsHome.aspx" target="_blank">Colleague Connect</a> for your Policies &amp; Benefits Information
             </div>
         </div>
@@ -43,7 +64,8 @@ export default function() {
             if(state.loading) {
                 return <ul className={style.list}>{loading}</ul>
             }
-            let documents = state.documents.map(e => <DocItem doc={e} />);
+            let docCut = state.documents.slice((state.page * state.increment), state.page * state.increment + state.increment);
+            let documents = docCut.map(e => <DocItem key={e.id} doc={e} />);
          
             let cccallout = (state.selectedCountry === "United States of America" || state.selectedCountry === "Canada") ? <CCCallout /> : null;
            return <ul className={style.list}>

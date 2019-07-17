@@ -1,0 +1,36 @@
+@import '../../styles/variables.scss';
+
+.container {
+    margin-top: 8px;
+    display: flex; 
+    justify-content: space-between;
+    align-items: center; 
+}
+
+.flipper {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    width: 26px;
+    line-height: 24px;
+    height: 26px;
+    border: 2px solid transparent;
+    text-align: center; 
+    background: transparent;
+    outline: none; 
+    display: block;
+    &:hover {
+        color: $link-blue; 
+        background: none; 
+    }
+    &.active {
+        pointer-events: none;
+        border-color: $link-blue; 
+    }
+}
+.flipperContainer {
+    display:flex; 
+    button {
+        cursor: pointer;
+    }
+}

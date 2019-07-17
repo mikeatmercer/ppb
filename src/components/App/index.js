@@ -10,6 +10,7 @@ import CountrySelector from "../CountrySelector";
 import DocumentList from "../DocumentList";
 import TopBar from "../TopBar";
 import SideBarContent from "../SideBarContent";
+import Pagination from "../Pagination";
 
 
 function Column(pr) {
@@ -47,6 +48,7 @@ class App extends Component {
 
             
                 </Column>
+                <Pagination />
                 </div>
                 <div className={style.rightCol}>
                     <Column headerTitle={props.cLanguage.state.currentLanguage.translations.SidebarTitle} headerColor={"#004c50"}>
@@ -54,6 +56,7 @@ class App extends Component {
                             Based on your country. Change at left. 
                         </TopBar>
                         <SideBarContent/>
+                        
                  
                     </Column>
                 </div>

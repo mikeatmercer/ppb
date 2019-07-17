@@ -11,6 +11,12 @@
     position: relative;
     display:block;
     padding: 8px 8px 8px 44px;
+    text-decoration: none !important;
+    &:hover {
+        .text {
+            text-decoration: underline;
+        }
+    }
 }
 .usicon {
     position:absolute; 
@@ -26,4 +32,23 @@
     position: absolute;
     left: 14px;
     top: 6px; 
+}
+.managerTag {
+    background: white;
+    border: 1px solid $bg-grey;
+    line-height: 16px;
+    font-size: 10px;
+    line-height: 16px;
+    text-transform: uppercase;
+    color: black;
+    border-radius: 8px; 
+    padding: 0 4px; 
+    
+}
+.docItem {
+    //opacity: 0;
+    transition: opacity .25s;
+    &.active {
+        opacity: 1; 
+    }
 }

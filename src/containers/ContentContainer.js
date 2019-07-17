@@ -21,7 +21,8 @@ export default class ContentContainer extends Container {
             topicOptions: [],
             loading: true,
             page: 0,
-            increment: 20
+            increment: 20,
+            fade: true
         }
         this.updateTopic = this.updateTopic.bind(this);
         this.updatePage = this.updatePage.bind(this);
@@ -45,17 +46,19 @@ export default class ContentContainer extends Container {
         this.setState({documents: filtered});
     }
     updatePage(newCount) {
-        this.setState({page: newCount});
-        console.log(newCount);
+        $("#s4-workspace").scrollTop(250);
+        this.setState({page: parseInt(newCount)});
+     
     }
     updateCountry(country) {
-        this.setState({topicsLoading: true, loading: true, docsLoading: true, selectedTopic: null, selectedCountry: country, page: 0});
+        this.setState({topicsLoading: true, fade: false, loading: true, docsLoading: true, selectedTopic: null, selectedCountry: country, page: 0});
         localStorage.setItem('country',country);
         this.updateSupportHTML(country);
-        let query = `lists/GetByTitle('HRPolicies')/items?$select=IsHighlighted,PolicyName,File,Country/Title,ContentType/Name,ContentTypeId,URL,Topic/Title,Role/Title&$top=999&$expand=Role,Topic,ContentType,ContentType/Name,File,Country,Country/Title&$filter=substringof('${country}',Country/Title)`;
+        let query = `lists/GetByTitle('HRPolicies')/items?$select=ID,IsHighlighted,PolicyName,File,Country/Title,ContentType/Name,ContentTypeId,URL,Topic/Title,Role/Title&$top=999&$expand=Role,Topic,ContentType,ContentType/Name,File,Country,Country/Title&$filter=substringof('${country}',Country/Title)`;
 
         let updateCallback = function(data) {
             let topicOptions = [];
+            console.log(data.d.results);
             let doclist = data.d.results.map(function(e){
                 if(e.ContentType.Name == "Link to a Document" && !e.URL) {
                     return {
@@ -67,7 +70,9 @@ export default class ContentContainer extends Container {
                     topics: e.Topic.results.map(e => e.Title),
                     url: (e.ContentType.Name == "Link to a Document") ? e.URL.Url : e.File.ServerRelativeUrl,
                     type: (e.ContentType.Name == "Link to a Document") ? "link" : "download",
-                    highlighted: e.IsHighlighted 
+                    highlighted: e.IsHighlighted ,
+                    roles: e.Role.results.map(e => e.Title),
+                    id: e.ID
                 }
             });
             doclist = doclist.filter(function(e){
@@ -84,7 +89,8 @@ export default class ContentContainer extends Container {
                 });
       
                 topicOptions = topicOptions.filter((item,index,self) => self.indexOf(item) === index);
-                this.setState({topicOptions: topicOptions, });
+                this.setState({topicOptions: topicOptions, page: 0});
+                this.setState({fade:true});
         }.bind(this);
         ajaxQuery(query,updateCallback);
       
@@ -94,7 +100,7 @@ export default class ContentContainer extends Container {
         this.setState({supportHTMLstatus: "loading"});
         const htmlCallback = function(data) {
          //Make contact card thing work  
-         console.log(data.d.results);
+    
          
          var newHTML = data.d.results.map(e => HTMLClean(e.ContactTitle));
         
