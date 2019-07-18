@@ -54,7 +54,10 @@ export default class ContentContainer extends Container {
     }
             
     updatePage(newCount) {
-        $("#s4-workspace").scrollTop(250);
+        if($("#s4-workspace").scrollTop() > 250) {
+            $("#s4-workspace").scrollTop(250);
+        }
+ 
         this.setState({loading: true});
         
         setTimeout(function(){
