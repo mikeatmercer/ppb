@@ -3,6 +3,10 @@
     list-style: none;
     margin: 0;
     padding: 0;
+    transition: opacity .25s;
+    &.loading {
+        opacity: 0;
+    }
     li:nth-child(even) {
         background: $light-grey; 
     }
@@ -46,9 +50,10 @@
     
 }
 .docItem {
-    //opacity: 0;
-    transition: opacity .25s;
-    &.active {
-        opacity: 1; 
+    opacity: 1; 
+    transition: opacity .3s;
+    &.loading {
+      //  opacity: 0; 
+        pointer-events: none;
     }
 }

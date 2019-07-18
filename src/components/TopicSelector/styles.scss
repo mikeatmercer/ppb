@@ -14,7 +14,7 @@
     box-sizing: border-box;
     &.disabled {
         pointer-events: none;
-        opacity: .5; 
+        //opacity: .5; 
     }
     &:after {
         display:block;

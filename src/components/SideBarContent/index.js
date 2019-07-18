@@ -41,7 +41,7 @@ export default function() {
         {function(c){
         
             let quickLinks = c.state.documentsUnfiltered.filter((e) => ( e.highlighted));
-            let linkDisplay = (quickLinks.length > 0) ? <LinkList loading={c.state.loading} list={quickLinks} title={"Quick Links"} /> : null
+            let linkDisplay = (quickLinks.length > 0) ? <LinkList loading={c.state.countryLoading} list={quickLinks} title={"Quick Links"} /> : null
             
             return <div className={styles.sidebar}>
                 {linkDisplay}

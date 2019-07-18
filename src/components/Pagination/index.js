@@ -2,6 +2,7 @@ import {Subscribe} from "unstated";
 import ContentContainer from "../../containers/ContentContainer";
 import LanguageContainer from "../../containers/LanguageContainer";
 import style from "./style.scss";
+import SVG from "../../util/SVG";
 
 function PageButtons(p) {
     
@@ -9,8 +10,12 @@ function PageButtons(p) {
     return <Subscribe to={[ContentContainer]}>
         {(content) =>{
             function updatePage(e) {
-                e.preventDefault();
-                content.updatePage(e.target.value);
+                e.preventDefault();  
+                e.stopPropagation();
+         
+                let value = e.currentTarget.value || e.currentTarget.getAttribute("data-value");
+                content.updatePage(value);
+           
             }
             if((content.state.documents.length <= content.state.increment)) {
                 return null;
@@ -28,17 +33,18 @@ function PageButtons(p) {
                 }
                 return <button className={style.flipper} key={e} value={e}  onClick={updatePage}>{e + 1}</button>
             });
+
             return <div className={style.flipperContainer}>
        
-                <button onClick={updatePage} value={content.state.page - 1}
+                <button className={`${style.arrows} ${style.left}`} onClick={updatePage} value={parseInt(content.state.page) - 1}
                     style={{visibility: (content.state.page === 0)? "hidden": ""}}
                 >
-                    Back
+                    {SVG('chevron')} <span style="display:none">Back</span>
                 </button>
-                {pageFlippers}
-                <button onClick={updatePage} value={content.state.page + 1}
+                <div className={style.pageHolder}>{pageFlippers}</div>
+                <button className={`${style.arrows} ${style.right}`}  onClick={updatePage} value={parseInt(content.state.page + 1)}
                     style={{visibility: (content.state.page == (totalPages - 1))? "hidden": ""}}
-                >Next</button>
+                >{SVG('chevron')}</button>
             </div>
         }}
     </Subscribe>
@@ -56,9 +62,12 @@ export default function () {
                 documents = content.state.documents,
                 frontSplit = (page * increment),
                 backSplit = (frontSplit + increment);
-              
+            let entryCopy = language.state.currentLanguage.translations.CountInfo
+                            .replace("[[Start]]", frontSplit + 1)
+                            .replace('[[End]]', (backSplit <= documents.length)? backSplit : documents.length ) 
+                            .replace('[[Total]]', documents.length); 
             return <div className={style.container}>
-                <div >Showing {frontSplit + 1} to {(backSplit <= documents.length)? backSplit : documents.length} of {documents.length} entries</div>
+                <div >{entryCopy}</div>
                 <PageButtons />
                
             </div>

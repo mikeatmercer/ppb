@@ -18,6 +18,7 @@ export default class ContentContainer extends Container {
             docsLoading: true,
             topicsLoading: true, 
             selectedTopic: "", 
+            countryLoading: true,
             topicOptions: [],
             loading: true,
             page: 0,
@@ -30,41 +31,57 @@ export default class ContentContainer extends Container {
     }
     
     updateTopic(topic) {
-        this.setState({selectedTopic: topic, page: 0});
-        if(!topic || topic === "all") {
-            this.setState({documents: this.state.documentsUnfiltered});
-            return ; 
-        }
-   
-        let filtered = this.state.documentsUnfiltered.filter(function(e){
-            let inArray = e.topics.filter(e => e === topic);
-            return inArray.length > 0; 
-           /* let topicList = e.topics.map(e => e.Title);
-            let inArray = topicList.filter(e => e === topic);
-            return inArray.length > 0;*/
-        });
-        this.setState({documents: filtered});
+    
+        
+        this.setState({selectedTopic: topic, page: 0, loading: true});
+        setTimeout(function(){
+        
+            if(!topic || topic === "all") {
+                this.setState({documents: this.state.documentsUnfiltered});
+            
+            } else {
+                let filtered = this.state.documentsUnfiltered.filter(function(e){
+                    let inArray = e.topics.filter(e => e === topic);
+                    return inArray.length > 0; 
+                });
+                this.setState({documents: filtered});
+            }
+            setTimeout(function(){
+                this.setState({loading: false});
+            }.bind(this));
+        }.bind(this),250);
+        
     }
+            
     updatePage(newCount) {
         $("#s4-workspace").scrollTop(250);
-        this.setState({page: parseInt(newCount)});
-     
+        this.setState({loading: true});
+        
+        setTimeout(function(){
+            this.setState({page: parseInt(newCount)});
+            this.setState({loading:false});
+        }.bind(this),250);
     }
     updateCountry(country) {
-        this.setState({topicsLoading: true, fade: false, loading: true, docsLoading: true, selectedTopic: null, selectedCountry: country, page: 0});
+        this.setState({topicsLoading: true, fade: false, loading: true, docsLoading: true, selectedTopic: null, selectedCountry: country, page: 0,countryLoading: true});
         localStorage.setItem('country',country);
         this.updateSupportHTML(country);
         let query = `lists/GetByTitle('HRPolicies')/items?$select=ID,IsHighlighted,PolicyName,File,Country/Title,ContentType/Name,ContentTypeId,URL,Topic/Title,Role/Title&$top=999&$expand=Role,Topic,ContentType,ContentType/Name,File,Country,Country/Title&$filter=substringof('${country}',Country/Title)`;
 
         let updateCallback = function(data) {
             let topicOptions = [];
-            console.log(data.d.results);
             let doclist = data.d.results.map(function(e){
                 if(e.ContentType.Name == "Link to a Document" && !e.URL) {
-                    return {
-                        bad: true
+                    if(!e.File.ServerRelativeUrl) {
+                        return {
+                            bad: true
+                        }
+                    } else {
+                        e.ContentType.Name = "Document";
                     }
+                    
                 }
+    
                 return {
                     title: HTMLstrip(e.PolicyName),
                     topics: e.Topic.results.map(e => e.Title),
@@ -79,7 +96,7 @@ export default class ContentContainer extends Container {
                 return !e.bad;
             });
       
-                this.setState({documentsUnfiltered:doclist, documents:doclist, loading: false});
+                this.setState({documentsUnfiltered:doclist, documents:doclist, loading: false,countryLoading:false});
                 
                 data.d.results.forEach((e) => {
                     
