@@ -11,6 +11,6 @@ export default (config, env, helpers) => {
     let {rule} = helpers.getLoadersByName(config, "css-loader")[0];
     rule.loader[2].options.localIdentName = '[sha1:hash:hex:5]';
     let { plugin } = helpers.getPluginsByName(config, "UglifyJsPlugin")[0];
-    plugin.options.sourceMap = false
+  //  plugin.options.sourceMap = false
   }
 };

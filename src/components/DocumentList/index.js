@@ -3,22 +3,7 @@ import ContentContainer from "../../containers/ContentContainer";
 import HTMLstrip from "../../util/HTMLstrip";
 import style from "./style.scss";
 import SVG from "../../util/SVG";
-/*
-function DocItem({doc}) {
-    return <Subscribe to={[ContentContainer]}>
-            {({state}) => {
-let managerTag = (doc.roles.length === 1 && doc.roles[0] === "Manager") ? <span className={style.managerTag}>For Managers</span> : null
-let active = (this.props.loading) ? style.loading : "";
 
-return <li className={`${style.docItem} ${active}`}>
-    <a href={doc.url} target="_blank" className={style.container}>{SVG(doc.type, style.svg)}<span className={style.text}>{HTMLstrip(doc.title)}</span> {managerTag}
-    </a>
-
-</li>
-            }}
-        </Subscribe>
-}
-*/
 function DocItem({doc}) {
     let managerTag = (doc.roles.length === 1 && doc.roles[0] === "Manager") ? <span className={style.managerTag}>For Managers</span> : null
     return <li className={style.docItem}>
