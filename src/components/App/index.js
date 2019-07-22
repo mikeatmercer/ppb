@@ -1,5 +1,5 @@
-import { h, Component, render } from "preact";
-import {Provider, Subscribe, Container} from "unstated";
+import { Component } from "preact";
+import {Provider, Subscribe} from "unstated";
 
 import LanguageSelector from "../LanguageSelector";
 import LanguageContainer from "../../containers/LanguageContainer";
@@ -31,10 +31,6 @@ class App extends Component {
     }
 
     render(props,state) {
-        let test = [];
-
-        
-
         return (
             
             <div className={style.ppb_mainAppPage} id="ppb_mainAppPage">
@@ -60,11 +56,6 @@ class App extends Component {
                  
                     </Column>
                 </div>
-            
-            
-            <br/>
-            
-            
         </div>
         
         ) 

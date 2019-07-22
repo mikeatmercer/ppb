@@ -51,9 +51,7 @@ export default class LanguageContainer extends Container {
         let query = "lists/GetByTitle('HRTranslations')/items?$select=*,Countries/Title&$expand=Countries";
         const languageCallback = function(data) {
             let options = data.d.results.map(e => {
-                let countries = e.Countries.results.map(e => {
-                    return e.Title.trim()
-                });
+                let countries = e.Countries.results.map(e => e.Title.trim());
                 let translations = JSON.parse(JSON.stringify(e));
                 delete translations.ID;
                 delete translations.Title;
