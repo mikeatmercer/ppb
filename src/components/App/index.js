@@ -53,7 +53,7 @@ class App extends Component {
                 <div className={style.rightCol}>
                     <Column headerTitle={props.cLanguage.state.currentLanguage.translations.SidebarTitle} headerColor={"#004c50"}>
                         <TopBar>
-                            Based on your country. Change at left. 
+                            {props.cLanguage.state.currentLanguage.translations.SidebarInfo}
                         </TopBar>
                         <SideBarContent/>
                         

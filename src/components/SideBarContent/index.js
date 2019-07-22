@@ -37,13 +37,24 @@ function ContactHTML(p) {
 }
 
 export default function() {
-    return <Subscribe to={[ContentContainer]}>
-        {function(c){
+    return <Subscribe to={[ContentContainer, LanguageContainer]}>
+        {function(c,l){
         
             let quickLinks = c.state.documentsUnfiltered.filter((e) => ( e.highlighted));
-            let linkDisplay = (quickLinks.length > 0) ? <LinkList loading={c.state.countryLoading} list={quickLinks} title={"Quick Links"} /> : null
+            let linkDisplay = (quickLinks.length > 0) ? <LinkList loading={c.state.countryLoading} list={quickLinks} title={l.state.currentLanguage.translations.QuickLinks} /> : null
+            let promoted = [
+                {
+                    url: "http://sites.mercer.com/sites/HR/SitePages/Total-Rewards.aspx",
+                    title: l.state.currentLanguage.translations.PayLink
+                },
+                {
+                    url: "http://sites.mercer.com/sites/HR/SitePages/Get-Your-Questions-Answered.aspx",
+                    title: l.state.currentLanguage.translations.TrainingLink
+                }
+            ]
             
             return <div className={styles.sidebar}>
+                <LinkList title={l.state.currentLanguage.translations.PromotedHeader} list={promoted} />
                 {linkDisplay}
                 <ContactHTML html={c.state.supportHTML}status={c.state.supportHTMLstatus}/>
             </div>
