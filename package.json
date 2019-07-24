@@ -12,10 +12,11 @@
     "build": "preact build --no-prerender --clean --template src/index.ejs --service-worker=false",
     "serve": "npm run build && preact serve",
     "dev": "preact watch --template src/index.ejs",
-    "dist": "microbundle --entry src/components/hello-world/index.js"
+    "dist": "microbundle --entry src/components/hello-world/index.js",
+    "analyze": "webpack-bundle-analyzer build/stats.json build --mode static"
   },
   "keywords": [],
-  "author": "Zouhir <zouhir@zouhir.org>",
+  "author": "mike <mike.moore1@mercer.com>",
   "license": "MIT",
   "devDependencies": {
     "eslint": "^4.5.0",
@@ -27,15 +28,14 @@
     "preact-cli": "^2.0.2",
     "preact-render-to-string": "^3.7.0",
     "preact-widget-scripts": "^0.6.0",
-    "sass-loader": "^6.0.6"
+    "sass-loader": "^6.0.6",
+    "webpack-bundle-analyzer": "^3.3.2"
   },
   "dependencies": {
-    "linkstate": "^1.1.1",
     "preact": "^8.2.5",
     "preact-compat": "^3.17.0",
     "preact-habitat": "^3.1.0",
     "preact-render-to-string": "^4.1.0",
-    "preact-router": "^2.5.7",
     "unstated": "^2.1.1"
   },
   "jest": {
