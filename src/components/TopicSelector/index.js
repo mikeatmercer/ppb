@@ -3,19 +3,54 @@ import {Subscribe} from "unstated";
 import ContentContainer from "../../containers/ContentContainer";
 import LanguageContainer from "../../containers/LanguageContainer";
 import {Component} from "preact";
+import $ from "jquery";
+import TopicList from "./TopicList";
+
+
 
 
 export default class TopicSelector extends Component {
     constructor() {
         super();
         this.state = {
-            focused: false
-        }
+            focused: false,
+        }  
+        this.addFocus = this.addFocus.bind(this);
+        this.windowListener;
   
     }
   
+    addFocus(e) {
+        let swap = (!e)? false : true; 
+        
+        this.setState({focused: swap });
+    }
+    componentDidMount() {
+        this.windowListener = $(document).on('click',function(e){     
+            if (!this.state.focused ) {
+                return ; 
+            }       
+            if(
+                e.pageX < $(this.container).offset().left || 
+                e.pageX > $(this.container).offset().left + $(this.container).innerWidth()  || 
+                e.pageY <  $(this.container).offset().top || 
+                e.pageY > $(this.container).offset().top + $(this.container).innerHeight() + $(this.dropdown).innerHeight() ||
+                e.pageY <= 35
+                ){
+             
+                this.setState({focused: false, highlight: -1});
+            }
+            
+
+        }.bind(this))
+    }
+    componentWillUnmount() {
+        this.windowListener = null; 
+    }
+    
  
     render() {
+     
         return <Subscribe to={[ContentContainer, LanguageContainer]}>
 {function(content, lang){
     
@@ -23,23 +58,29 @@ export default class TopicSelector extends Component {
     let placeholder = content.state.selectedTopic || (lang.state.currentLanguage.translations.TopicPlaceholder || <span>&nbsp;</span>);
     placeholder = (content.state.selectedTopic === "all") ? "All Topics" : placeholder; 
     let loadingStyle = (content.state.loading === true)? style.disabled : "";
-    let topicOptions = content.state.topicOptions.map(e => <option value={e}>{e}</option>)
-
+  
+    let focusStyle = (this.state.focused) ? style.focused : ""
+   
+    let topicDropdown = (this.state.focused) ? <TopicList 
+        selected={content.state.selectedTopic} 
+        options={content.state.topicOptions.map((i) => ({title : i, value: i}))} 
+        updateTopic={content.updateTopic}
+        disableFocus={this.addFocus}
+        /> : null;
+    const focusSwap = function() {  
+        let swap = (this.state.focused) ? false : true;
+        this.addFocus(swap);
+    }.bind(this);
     return(    
     <div className={style.box}>
-        <div className={`${style.container} ${loadingStyle}`}>
+        <div onClick={focusSwap} className={`${style.container} ${loadingStyle} ${focusStyle}`} ref={container => this.container = container} >
    
             <div className={style.instructions}>{instructions}</div>
             <div className={style.placeholder}>{placeholder}</div>
            
-            <select ref={select => this.select = select}
-                className={`${style.select}`}
-                onChange={(e) => (content.updateTopic(e.target.value))} 
-                value={content.state.selectedTopic}
-                disabled={content.state.loading}>
-                    <option value="all">All topics</option>
-                    {topicOptions}
-            </select>
+           
+           {topicDropdown}
+            
             
         </div>
     </div>
@@ -51,3 +92,4 @@ export default class TopicSelector extends Component {
 
     
 }
+

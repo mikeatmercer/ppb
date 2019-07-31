@@ -6,8 +6,9 @@ import SVG from "../../util/SVG";
 
 function DocItem({doc}) {
     let managerTag = (doc.roles.length === 1 && doc.roles[0] === "Manager") ? <span className={style.managerTag}>For Managers</span> : null
+    let target = (doc.type === "link") ? "_blank" : "";
     return <li className={style.docItem}>
-        <a className={style.container} href={doc.url} >
+        <a className={style.container} href={doc.url} target={target}>
             {SVG(doc.type, style.svg)}
             <span className={style.text}>{HTMLstrip(doc.title)}</span> {managerTag}
             
@@ -45,6 +46,12 @@ export default function() {
             let documents = docCut.map(e => <DocItem key={e.id} doc={e} loading={state.loading}/>);
          
             let cccallout = (state.selectedCountry === "United States of America" || state.selectedCountry === "Canada") ? <CCCallout /> : null;
+            if(!state.loading && state.documents.length === 0) {
+                return <ul className={`${style.list} ${loadingClass}`}>
+                {cccallout}
+                <li><span style={{paddingLeft: "18px"}} className={style.container}>Refer to the information at the right</span></li>
+                </ul>
+            }
            return <ul className={`${style.list} ${loadingClass}`}>
                 {cccallout}
                 {documents}

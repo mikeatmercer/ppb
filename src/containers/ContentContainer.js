@@ -31,8 +31,6 @@ export default class ContentContainer extends Container {
     }
     
     updateTopic(topic) {
-    
-        
         this.setState({selectedTopic: topic, page: 0, loading: true});
         setTimeout(function(){
         
@@ -74,6 +72,7 @@ export default class ContentContainer extends Container {
         let updateCallback = function(data) {
             let topicOptions = [];
             let doclist = data.d.results.map(function(e){
+                e.type = e.ContentType.Name;
                 if(e.ContentType.Name == "Link to a Document" && !e.URL) {
                     if(!e.File.ServerRelativeUrl) {
                         return {
@@ -92,7 +91,7 @@ export default class ContentContainer extends Container {
                     type: (e.ContentType.Name == "Link to a Document") ? "link" : "download",
                     highlighted: e.IsHighlighted ,
                     roles: e.Role.results.map(e => e.Title),
-                    id: e.ID
+                    id: e.ID,
                 }
             });
             doclist = doclist.filter(function(e){

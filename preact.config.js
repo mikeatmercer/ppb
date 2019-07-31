@@ -7,7 +7,7 @@ export default (config, env, helpers) => {
 
   let { plugin } = helpers.getPluginsByName(config, "ExtractTextPlugin")[0];
   plugin.options.disable = true;
-  config.plugins.push(new BundleAnalyzerPlugin());
+ 
   if (env.production) {
     console.log(config);
     config.output.libraryTarget = "umd";

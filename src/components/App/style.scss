@@ -4,7 +4,9 @@
     position:relative; 
     font-size: 12px;
     color:black; 
-   
+    a:visited {
+        color: #595997 !important; 
+    }
 }
 .leftCol {
     width: 500px;
