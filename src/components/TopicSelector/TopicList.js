@@ -54,10 +54,10 @@ export default class TopicList extends Component {
                 this.setState({highlight: newH});
                 break;
             case 13:
-               // this.props.updateTopic(this.state.options[this.state.highlight].value);
-               $(this.itemRefs[this.state.highlight]).click(); 
+                this.props.updateTopic(this.state.options[this.state.highlight].value);
+          
                 this.props.disableFocus(false);
-                console.log('dummb');
+            
                 return false ;
                 break; 
         }
@@ -77,7 +77,7 @@ export default class TopicList extends Component {
         }
     }
     componentDidMount() {
-       // this.input.focus(); 
+     
         this.setState({styles: $("#s4-workspace").attr('style')});
         let barPad = $(window).width() - $("#insert-dropdown").width();
         $("#s4-workspace").css({"overflow": "hidden", "box-sizing": "border-box", "padding-right": barPad });
@@ -86,52 +86,15 @@ export default class TopicList extends Component {
                 $("#s4-workspace").scrollTop(234);
             }
         }.bind(this), 100)
-      this.keyClicks = function(e) {
-        // Down = 40, Up = 38, Enter = 13
-        if( (e.keyCode == 38 && this.state.highlight <= 0) || 
-            (e.keyCode == 40 && this.state.highlight >= this.state.options.length - 1 ) ) {
-            return false ; 
-        }
-        let newH = this.state.highlight + 1;
-        
-        switch(e.keyCode) {
-            case 40: 
-               /* listH = Math.floor($(this.listC).innerHeight() + $(this.listC).offset().top);
-                itemH = Math.floor($(this.itemRefs[newH]).innerHeight() + $(this.itemRefs[newH]).offset().top); 
-                if(itemH > listH) {
-                    console.log(scroll);
-                    console.log(itemH);
-                    console.log(listH);
-                    newS =  scroll + (itemH - listH);
-                    $(this.listC).scrollTop(newS)
-                }*/
-                this.keyboardScroll(this.itemRefs[newH]); 
-                this.setState({highlight: newH});
-
-                break;
-            case 38:
-                /*
-                itemH = Math.floor($(this.itemRefs[newH]).offset().top);
-                listH = Math.floor($(this.listC).offset().top);
-    
-                if(itemH < listH) {
-                    newS = scroll -( listH - itemH);
-                    $(this.listC).scrollTop(newS);
-                }
-                */
-                newH = this.state.highlight - 1;
-                this.keyboardScroll(this.itemRefs[newH]); 
-                this.setState({highlight: newH});
-                break;
-            case 13:
-                this.props.disableFocus(false);
-                
-                console.log(this.state.options[this.state.highlight].value);
-                break; 
-        }
-
-      }.bind(this);
-      if(this.state.highlight >= 0) {
+      
+      if(this.state.highlight >= 0 ) {
+          let current = this.itemRefs[this.state.highlight];
+          if($(current).offset().top + $(current).innerHeight() >= $(this.listC).offset().top + $(this.listC).innerHeight()) {
+            $(this.listC).scrollTop(
+                ($(this.itemRefs[this.state.highlight]).offset().top - $(this.listC).offset().top ) / 2
+            )
+          }
+          
        // $(this.listC).scrollTop(( $(this.itemRefs[this.state.highlight]).offset.top() - $(this.listC).offset().top ) / 2 );
       } 
       

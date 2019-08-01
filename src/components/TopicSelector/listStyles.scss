@@ -1,0 +1,26 @@
+@import "../../styles/variables.scss";
+
+.optionList {
+    position: absolute;
+    left: 0;
+    top: calc(100% + 2px);
+    width: 100%; 
+    background: white; 
+    border: 2px solid $bg-grey; 
+    border-width: 0 2px 2px 2px; 
+    box-sizing: border-box;
+    overflow-y: auto; 
+    max-height: 324px; 
+    width: 376px;
+    @media(max-height: 625px) {
+        //max-height: 200px; 
+    }
+    .option {
+        padding: 8px 12px; 
+        color: $link-blue;
+        cursor: pointer; 
+        &:hover, &.selected {
+            background-color: rgba(0,168,200,0.1);
+        }
+    }
+}

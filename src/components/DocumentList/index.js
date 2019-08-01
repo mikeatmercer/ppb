@@ -46,7 +46,7 @@ export default function() {
            
             let documents = docCut.map(e => <DocItem key={e.id} doc={e} loading={state.loading}/>);
          
-            let cccallout = (state.selectedCountry === "United States of America" || state.selectedCountry === "Canada") ? <CCCallout /> : null;
+            let cccallout = ((state.selectedCountry === "United States of America" || state.selectedCountry === "Canada") && !state.loading) ? <CCCallout /> : null;
             if(!state.loading && state.documents.length === 0) {
                 return <ul className={`${style.list} ${loadingClass}`}>
                 {cccallout}
