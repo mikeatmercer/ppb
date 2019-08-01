@@ -6,9 +6,8 @@ import SVG from "../../util/SVG";
 
 function DocItem({doc}) {
     let managerTag = (doc.roles.length === 1 && doc.roles[0] === "Manager") ? <span className={style.managerTag}>For Managers</span> : null
-    let target = (doc.type === "link") ? "_blank" : "";
     return <li className={style.docItem}>
-        <a className={style.container} href={doc.url} target={target}>
+        <a className={style.container} href={doc.url} target="_blank">
             {SVG(doc.type, style.svg)}
             <span className={style.text}>{HTMLstrip(doc.title)}</span> {managerTag}
             
