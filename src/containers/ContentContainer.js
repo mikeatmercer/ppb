@@ -31,9 +31,13 @@ export default class ContentContainer extends Container {
     }
     
     updateTopic(topic) {
-        this.setState({selectedTopic: topic, page: 0, loading: true});
-        setTimeout(function(){
+     
+       this.setState({loading: true});
+       
+      
         
+        setTimeout(function(){
+            this.setState({selectedTopic: topic, page: 0});
             if(!topic || topic === "all") {
                 this.setState({documents: this.state.documentsUnfiltered});
             
@@ -44,24 +48,25 @@ export default class ContentContainer extends Container {
                 });
                 this.setState({documents: filtered});
             }
-            setTimeout(function(){
-                this.setState({loading: false});
-            }.bind(this));
+            this.setState({loading: false});
+  
         }.bind(this),250);
+      
         
     }
             
     updatePage(newCount) {
+        console.log("called");
         if($("#s4-workspace").scrollTop() > 250) {
             $("#s4-workspace").scrollTop(250);
         }
  
         this.setState({loading: true});
-        
+       
         setTimeout(function(){
-            this.setState({page: parseInt(newCount)});
-            this.setState({loading:false});
-        }.bind(this),250);
+            this.setState({page: newCount, loading: false});
+           
+        }.bind(this),250); 
     }
     updateCountry(country) {
         this.setState({topicsLoading: true, fade: false, loading: true, docsLoading: true, selectedTopic: null, selectedCountry: country, page: 0,countryLoading: true});
@@ -146,3 +151,5 @@ export default class ContentContainer extends Container {
     }
 
 }
+
+

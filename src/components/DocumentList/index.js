@@ -42,6 +42,7 @@ export default function() {
                // return <ul className={style.list}>{loading}</ul>
             }
             let docCut = state.documents.slice((state.page * state.increment), state.page * state.increment + state.increment);
+               
            
             let documents = docCut.map(e => <DocItem key={e.id} doc={e} loading={state.loading}/>);
          

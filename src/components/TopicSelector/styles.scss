@@ -71,6 +71,10 @@
     box-sizing: border-box;
     overflow-y: auto; 
     max-height: 324px; 
+    width: 376px;
+    @media(max-height: 625px) {
+        //max-height: 200px; 
+    }
     .option {
         padding: 8px 12px; 
         color: $link-blue;

@@ -26,31 +26,77 @@ export default class TopicList extends Component {
         }
         this.state = {
             highlight: initialHighlight,
-            options: options
+            options: options,
+            styles: "",
+       
+        }
+        this.keyboardScroll = this.keyboardScroll.bind(this);
+        this.handleKeyBoard = this.handleKeyBoard.bind(this);
+    }
+    handleKeyBoard(e) {
+        if( (e.keyCode == 38 && this.state.highlight <= 0) || 
+            (e.keyCode == 40 && this.state.highlight >= this.state.options.length - 1 ) ) {
+            return false ; 
+        }
+        let newH = this.state.highlight + 1;
+        
+        switch(e.keyCode) {
+            case 40: 
+         
+                this.keyboardScroll(this.itemRefs[newH]); 
+                this.setState({highlight: newH});
+
+                break;
+            case 38:
+        
+                newH = this.state.highlight - 1;
+                this.keyboardScroll(this.itemRefs[newH]); 
+                this.setState({highlight: newH});
+                break;
+            case 13:
+               // this.props.updateTopic(this.state.options[this.state.highlight].value);
+               $(this.itemRefs[this.state.highlight]).click(); 
+                this.props.disableFocus(false);
+                console.log('dummb');
+                return false ;
+                break; 
+        }
+    }
+    keyboardScroll(i) {
+        const   scroll = $(this.listC).scrollTop(),
+                lTop = Math.floor($(this.listC).offset().top),
+                lBottom = lTop + $(this.listC).innerHeight(),
+                iTop = Math.floor($(i).offset().top), 
+                iBottom = iTop + $(i).innerHeight();
+        if(iTop < lTop) {
+            $(this.listC).scrollTop(scroll - (lTop - iTop));
+            return ; 
+        }
+        if(iBottom > lBottom) {
+            $(this.listC).scrollTop(scroll + (iBottom - lBottom));
         }
     }
     componentDidMount() {
+       // this.input.focus(); 
+        this.setState({styles: $("#s4-workspace").attr('style')});
+        let barPad = $(window).width() - $("#insert-dropdown").width();
+        $("#s4-workspace").css({"overflow": "hidden", "box-sizing": "border-box", "padding-right": barPad });
         setTimeout(function(){
-            if($(window).height() <= 600) {
+            if($(window).height() <= 650) {
                 $("#s4-workspace").scrollTop(234);
             }
-            $("#s4-workspace").css({"overflow": "hidden", "box-sizing": "border-box", "padding-right": 16 });
-        }.bind(this), 150)
+        }.bind(this), 100)
       this.keyClicks = function(e) {
         // Down = 40, Up = 38, Enter = 13
         if( (e.keyCode == 38 && this.state.highlight <= 0) || 
             (e.keyCode == 40 && this.state.highlight >= this.state.options.length - 1 ) ) {
             return false ; 
         }
-        let newH = this.state.highlight + 1,
-            listH,
-            itemH,
-            newS,
-            scroll = $(this.listC).scrollTop();
+        let newH = this.state.highlight + 1;
         
         switch(e.keyCode) {
             case 40: 
-                listH = Math.floor($(this.listC).innerHeight() + $(this.listC).offset().top);
+               /* listH = Math.floor($(this.listC).innerHeight() + $(this.listC).offset().top);
                 itemH = Math.floor($(this.itemRefs[newH]).innerHeight() + $(this.itemRefs[newH]).offset().top); 
                 if(itemH > listH) {
                     console.log(scroll);
@@ -58,12 +104,13 @@ export default class TopicList extends Component {
                     console.log(listH);
                     newS =  scroll + (itemH - listH);
                     $(this.listC).scrollTop(newS)
-                }
+                }*/
+                this.keyboardScroll(this.itemRefs[newH]); 
                 this.setState({highlight: newH});
 
                 break;
             case 38:
-                newH = this.state.highlight - 1;
+                /*
                 itemH = Math.floor($(this.itemRefs[newH]).offset().top);
                 listH = Math.floor($(this.listC).offset().top);
     
@@ -71,11 +118,15 @@ export default class TopicList extends Component {
                     newS = scroll -( listH - itemH);
                     $(this.listC).scrollTop(newS);
                 }
+                */
+                newH = this.state.highlight - 1;
+                this.keyboardScroll(this.itemRefs[newH]); 
                 this.setState({highlight: newH});
                 break;
             case 13:
                 this.props.disableFocus(false);
-                this.props.updateTopic(this.state.options[this.state.highlight].value);
+                
+                console.log(this.state.options[this.state.highlight].value);
                 break; 
         }
 
@@ -84,11 +135,12 @@ export default class TopicList extends Component {
        // $(this.listC).scrollTop(( $(this.itemRefs[this.state.highlight]).offset.top() - $(this.listC).offset().top ) / 2 );
       } 
       
-      document.body.addEventListener('keydown', this.keyClicks);
+      document.body.addEventListener('keydown', this.handleKeyBoard);
     }
     componentWillUnmount() {
-        document.body.removeEventListener('keydown', this.keyClicks); 
-       $("#s4-workspace").css({'overflow': "auto", "padding-right": 0});
+        
+        document.body.removeEventListener('keydown', this.handleKeyBoard); 
+        $("#s4-workspace").attr("style", this.state.styles);
     }
     
 
@@ -97,6 +149,11 @@ export default class TopicList extends Component {
         setRef={(ref) => {this.itemRefs[i] = ref}}
         highlighted={state.highlight === i}
         />);
-        return <div ref={container => this.listC = container} className={style.optionList}>{options}</div>
+      
+        return <div ref={container => this.listC = container}  className={style.optionList}>
+            
+                {options}
+        </div>
     }
 }
+//<input ref={input => this.input = input} onKeyDown={this.handleKeyBoard} />

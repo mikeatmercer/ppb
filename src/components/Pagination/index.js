@@ -4,19 +4,28 @@ import LanguageContainer from "../../containers/LanguageContainer";
 import style from "./style.scss";
 import SVG from "../../util/SVG";
 
+function PaginationButton(p) {
+    function updater(e) {
+        e.preventDefault();  
+        e.stopPropagation();
+        if(p.updateClick) {
+            p.updateClick(p.value);
+        }
+        
+        return false; 
+    }
+    
+    return <div className={p.bClass} onClick={updater}>
+        {p.children}
+    </div>
+}
+
 function PageButtons(p) {
     
 
     return <Subscribe to={[ContentContainer]}>
         {(content) =>{
-            function updatePage(e) {
-                e.preventDefault();  
-                e.stopPropagation();
          
-                let value = e.currentTarget.value || e.currentTarget.getAttribute("data-value");
-                content.updatePage(value);
-           
-            }
             if((content.state.documents.length <= content.state.increment)) {
                 return null;
             }
@@ -29,22 +38,27 @@ function PageButtons(p) {
             }
             pageFlippers = pageFlippers.map(function(e){
                 if(e === content.state.page) {
-                    return <span className={`${style.flipper} ${style.active}`}>{e+1}</span>
+                    return <PaginationButton  key={e} bClass={`${style.flipper} ${style.active}`}>{e+1}</PaginationButton>
                 }
-                return <button className={style.flipper} key={e} value={e}  onClick={updatePage}>{e + 1}</button>
+                return <PaginationButton value={e} key={e} updateClick={content.updatePage} bClass={style.flipper}>{e + 1}</PaginationButton>
             });
-
+            let hideBack = (content.state.page === 0) ? style.hideArrow : "";
+            let hideForward = (content.state.page === (totalPages -1)) ? style.hideArrow : ""
             return <div className={style.flipperContainer}>
-       
-                <button className={`${style.arrows} ${style.left}`} onClick={updatePage} value={parseInt(content.state.page) - 1}
-                    style={{visibility: (content.state.page === 0)? "hidden": ""}}
-                >
+                <PaginationButton 
+                    bClass={`${style.arrows} ${style.left} ${hideBack}`} 
+                    updateClick={content.updatePage} 
+                    value={content.state.page - 1}>
                     {SVG('chevron')} <span style="display:none">Back</span>
-                </button>
+                </PaginationButton>
+              
                 <div className={style.pageHolder}>{pageFlippers}</div>
-                <button className={`${style.arrows} ${style.right}`}  onClick={updatePage} value={parseInt(content.state.page + 1)}
-                    style={{visibility: (content.state.page == (totalPages - 1))? "hidden": ""}}
-                >{SVG('chevron')}</button>
+                <PaginationButton
+                    bClass={`${style.arrows} ${style.right} ${hideForward}`}
+                    updateClick={content.updatePage}
+                    value={content.state.page + 1}>
+                {SVG('chevron')}
+                </PaginationButton>
             </div>
         }}
     </Subscribe>
@@ -56,13 +70,14 @@ export default function () {
             if(!content.state.documents.length) {
                 return ;
             }
- 
+            console.log(content.state.page);
             let page = content.state.page,
                 increment = content.state.increment,
                 documents = content.state.documents,
                 frontSplit = (page * increment),
                 backSplit = (frontSplit + increment);
-            let entryCopy = language.state.currentLanguage.translations.CountInfo
+            const infoTrans = language.state.currentLanguage.translations.CountInfo || ""; 
+            let entryCopy = infoTrans
                             .replace("[[Start]]", frontSplit + 1)
                             .replace('[[End]]', (backSplit <= documents.length)? backSplit : documents.length ) 
                             .replace('[[Total]]', documents.length); 

@@ -19,6 +19,13 @@ export default class LanguageContainer extends Container {
         }
         this.updateLanguage = this.updateLanguage.bind(this);
     }
+    getTrans(i) {
+        if(!this.state.currentLanguage.translations[i]) {
+            return "";
+        } else {
+            return this.state.currentLanguage.translations[i];
+        }
+    }
     updateLanguage(value, optionLoad) {
         let options = optionLoad || this.state.languageOptions; 
 

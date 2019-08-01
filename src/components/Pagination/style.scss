@@ -23,6 +23,7 @@
     outline: none; 
     display: block;
     margin-left: 4px;
+    cursor: pointer;
 
     &:last-child {
         margin-right: 4px;
@@ -52,6 +53,11 @@
     border: 0;
     background: none;
     margin: 0;
+    cursor: pointer;
+    &.hideArrow {
+        visibility: hidden;
+        pointer-events: none;
+    }
     &:hover {
         border: 0px solid transparent;
         background-color: rgba(0,168,200,0.1);
