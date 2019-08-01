@@ -13,9 +13,6 @@
     z-index: 1; 
     box-sizing: border-box;
     cursor: pointer; 
-    > * {
-    
-    }
     &.disabled {
         pointer-events: none;
         //opacity: .5; 
