@@ -15,7 +15,8 @@ export default class LanguageContainer extends Container {
                 translations: {
                    
                 }
-            }
+            },
+            oldTitle : document.title
         }
         this.updateLanguage = this.updateLanguage.bind(this);
     }
@@ -43,6 +44,7 @@ export default class LanguageContainer extends Container {
         })
         localStorage.setItem("language", value);
         localStorage.setItem('translations', JSON.stringify(updatedLanguage[0].translations));
+        document.title = (updatedLanguage[0].translations.MainTitle || this.state.oldTitle) + " - Me & My Career"; 
     }
     setLanguage () {
         const langSet = (localStorage.getItem('language') && localStorage.getItem('translations'));

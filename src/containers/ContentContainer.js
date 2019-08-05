@@ -72,7 +72,7 @@ export default class ContentContainer extends Container {
         this.setState({topicsLoading: true, fade: false, loading: true, docsLoading: true, selectedTopic: null, selectedCountry: country, page: 0,countryLoading: true});
         localStorage.setItem('country',country);
         this.updateSupportHTML(country);
-        let query = `lists/GetByTitle('HRPolicies')/items?$select=ID,IsHighlighted,PolicyName,File,Country/Title,ContentType/Name,ContentTypeId,URL,Topic/Title,Role/Title&$top=999&$expand=Role,Topic,ContentType,ContentType/Name,File,Country,Country/Title&$filter=substringof('${country}',Country/Title)`;
+        let query = `lists/GetByTitle('HRPolicies')/items?$select=ID,IsHighlighted,PolicyName,File,Country/Title,ContentType/Name,ContentTypeId,URL,Topic/Title,Role/Title&$top=999&$expand=Role,Topic,ContentType,ContentType/Name,File,Country,Country/Title&$filter=substringof('${country}',Country/Title)&$orderby= PolicyName asc`;
 
         let updateCallback = function(data) {
             let topicOptions = [];
@@ -101,6 +101,11 @@ export default class ContentContainer extends Container {
             });
             doclist = doclist.filter(function(e){
                 return !e.bad;
+            });
+            doclist = doclist.sort(function(a,b){
+                if(a.title < b.title) { return -1; }
+                if(a.title > b.title) { return 1; }
+                return 0;
             });
       
                 this.setState({documentsUnfiltered:doclist, documents:doclist, loading: false,countryLoading:false});

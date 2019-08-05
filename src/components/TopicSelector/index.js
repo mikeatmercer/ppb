@@ -56,7 +56,7 @@ export default class TopicSelector extends Component {
     
     let instructions = lang.state.currentLanguage.translations.TopicInstructions || <span>&nbsp;</span>
     let placeholder = content.state.selectedTopic || (lang.state.currentLanguage.translations.TopicPlaceholder || <span>&nbsp;</span>);
-    placeholder = (content.state.selectedTopic === "all") ? "All Topics" : placeholder; 
+    placeholder = (content.state.selectedTopic === "all") ? lang.state.currentLanguage.translations.AllTopics : placeholder; 
     let loadingStyle = (content.state.loading === true)? style.disabled : "";
   
     let focusStyle = (this.state.focused) ? style.focused : ""
@@ -66,6 +66,7 @@ export default class TopicSelector extends Component {
         options={content.state.topicOptions.map((i) => ({title : i, value: i}))} 
         updateTopic={content.updateTopic}
         disableFocus={this.addFocus}
+        AllTopicsTranslated={lang.state.currentLanguage.translations.AllTopics}
         /> : null;
     const focusSwap = function() {  
         let swap = (this.state.focused) ? false : true;

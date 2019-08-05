@@ -17,7 +17,7 @@ export default class TopicList extends Component {
         super(); 
         this.keyClicks;
         this.itemRefs = []; 
-        const options = [{title: "All Topics", value: "all"}].concat(props.options)
+        const options = [{title: props.AllTopicsTranslated, value: "all"}].concat(props.options)
         let initialHighlight = -1; 
         for (let i = 0; i < options.length; i++) {
             if (options[i].value === props.selected) {

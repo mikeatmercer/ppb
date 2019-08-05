@@ -3,6 +3,7 @@ import ContentContainer from "../../containers/ContentContainer";
 import HTMLstrip from "../../util/HTMLstrip";
 import style from "./style.scss";
 import SVG from "../../util/SVG";
+import LanguageContainer from "../../containers/LanguageContainer";
 
 function DocItem({doc}) {
     let managerTag = (doc.roles.length === 1 && doc.roles[0] === "Manager") ? <span className={style.managerTag}>For Managers</span> : null
@@ -29,8 +30,8 @@ function CCCallout() {
 
 
 export default function() {
-    return <Subscribe to={[ContentContainer]}>
-        {function({state}) {
+    return <Subscribe to={[ContentContainer, LanguageContainer]}>
+        {function({state},lang) {
             let loading = [];
             for(let i = 0; i < state.documents.length; i++) {
                 loading.push(<li ><div className={style.container}>&nbsp;</div></li>)
@@ -49,7 +50,7 @@ export default function() {
             if(!state.loading && state.documents.length === 0) {
                 return <ul className={`${style.list} ${loadingClass}`}>
                 {cccallout}
-                <li><span style={{paddingLeft: "18px"}} className={style.container}>Refer to the information at the right</span></li>
+                <li><span style={{paddingLeft: "18px"}} className={style.container}>{lang.state.currentLanguage.translations.EmptyState}</span></li>
                 </ul>
             }
            return <ul className={`${style.list} ${loadingClass}`}>
