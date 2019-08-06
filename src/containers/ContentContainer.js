@@ -9,7 +9,7 @@ export default class ContentContainer extends Container {
     constructor() {
         super();
         this.state = {
-            selectedCountry: null,
+            selectedCountry: "",
             documents: [],
             documentsUnfiltered: [],
             supportHTML: [],
