@@ -3,6 +3,7 @@ import $ from "jquery";
 import ajaxQuery from "../util/ajaxGet.js";
 import HTMLstrip from "../util/HTMLstrip.js";
 import HTMLClean from "../util/HTMLclean";
+import alphaOrder from "../util/alphaOrder";
 
 //SEND Filtername and page number down to list, compile it there. Create a page update function
 export default class ContentContainer extends Container { 
@@ -102,11 +103,7 @@ export default class ContentContainer extends Container {
             doclist = doclist.filter(function(e){
                 return !e.bad;
             });
-            doclist = doclist.sort(function(a,b){
-                if(a.title < b.title) { return -1; }
-                if(a.title > b.title) { return 1; }
-                return 0;
-            });
+            doclist = doclist.sort(alphaOrder);
       
                 this.setState({documentsUnfiltered:doclist, documents:doclist, loading: false,countryLoading:false});
                 
@@ -117,7 +114,9 @@ export default class ContentContainer extends Container {
                     });
                 });
       
-                topicOptions = topicOptions.filter((item,index,self) => self.indexOf(item) === index);
+                topicOptions = topicOptions.filter((item,index,self) => self.indexOf(item) === index)
+                                    .map((i) => ({title : i, value: i}))
+                                    .sort(alphaOrder)
                 this.setState({topicOptions: topicOptions, page: 0});
                 this.setState({fade:true});
         }.bind(this);

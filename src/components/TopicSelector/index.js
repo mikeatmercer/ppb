@@ -63,7 +63,7 @@ export default class TopicSelector extends Component {
    
     let topicDropdown = (this.state.focused) ? <TopicList 
         selected={content.state.selectedTopic} 
-        options={content.state.topicOptions.map((i) => ({title : i, value: i}))} 
+        options={content.state.topicOptions} 
         updateTopic={content.updateTopic}
         disableFocus={this.addFocus}
         AllTopicsTranslated={lang.state.currentLanguage.translations.AllTopics}
